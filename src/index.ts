@@ -1,0 +1,1 @@
+console.log('TypeScript Node.js server initialized'); 

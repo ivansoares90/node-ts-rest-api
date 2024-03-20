@@ -1,0 +1,20 @@
+{
+  "name": "node-ts-rest-api",
+  "version": "1.0.0",
+  "description": "Node.js REST API with TypeScript",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+} 
