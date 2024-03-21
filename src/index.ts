@@ -1,8 +1,8 @@
 import express from 'express';
 import routes from '@/routes';
+import config from '@/config';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -11,6 +11,6 @@ app.use(express.json());
 app.use('/', routes);
 
 // Start server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(config.port, () => {
+  console.log(`Server is running on port ${config.port}`);
 }); 
