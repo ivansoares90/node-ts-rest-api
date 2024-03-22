@@ -1,6 +1,7 @@
 import express from 'express';
 import routes from '@/routes';
 import config from '@/config';
+import { errorHandler } from '@/middlewares/error.middleware';
 
 const app = express();
 
@@ -9,6 +10,9 @@ app.use(express.json());
 
 // Routes
 app.use('/', routes);
+
+// Error handling
+app.use(errorHandler);
 
 // Start server
 app.listen(config.port, () => {
