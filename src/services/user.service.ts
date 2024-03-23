@@ -1,20 +1,22 @@
 import { AppError } from '@/middlewares/error.middleware';
 import { User, CreateUserDto, UpdateUserDto, UserResponse } from '@/types/user.types';
-
-// Mock database - replace with real database in production
-const users: User[] = [];
+import { Store } from '@/utils/store';
+import { generateId } from '@/utils/id';
 
 export class UserService {
+  private store: Store<User>;
+
+  constructor() {
+    this.store = new Store<User>();
+  }
+
   public async findById(id: string): Promise<UserResponse> {
-    const user = users.find(u => u.id === id);
-    if (!user) {
-      throw new AppError(404, 'User not found');
-    }
+    const user = await this.store.findById(id);
     return this.toUserResponse(user);
   }
 
   public async findByEmail(email: string): Promise<User | undefined> {
-    return users.find(u => u.email === email);
+    return this.store.findOne(user => user.email === email);
   }
 
   public async create(userData: CreateUserDto): Promise<UserResponse> {
@@ -23,41 +25,18 @@ export class UserService {
       throw new AppError(409, 'Email already exists');
     }
 
-    const now = new Date();
-    const newUser: User = {
-      id: Math.random().toString(36).substr(2, 9), // Replace with proper ID generation
-      ...userData,
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    users.push(newUser);
-    return this.toUserResponse(newUser);
+    const id = generateId();
+    const user = await this.store.create(id, userData);
+    return this.toUserResponse(user);
   }
 
   public async update(id: string, updateData: UpdateUserDto): Promise<UserResponse> {
-    const userIndex = users.findIndex(u => u.id === id);
-    if (userIndex === -1) {
-      throw new AppError(404, 'User not found');
-    }
-
-    const updatedUser: User = {
-      ...users[userIndex],
-      ...updateData,
-      updatedAt: new Date(),
-    };
-
-    users[userIndex] = updatedUser;
-    return this.toUserResponse(updatedUser);
+    const user = await this.store.update(id, updateData);
+    return this.toUserResponse(user);
   }
 
   public async delete(id: string): Promise<void> {
-    const userIndex = users.findIndex(u => u.id === id);
-    if (userIndex === -1) {
-      throw new AppError(404, 'User not found');
-    }
-
-    users.splice(userIndex, 1);
+    await this.store.delete(id);
   }
 
   private toUserResponse(user: User): UserResponse {
