@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { AppError } from './error.middleware';
+import { AuthUser } from '@/types/auth.types';
 
-interface JwtUser {
-  userId: string;
-  email: string;
+declare global {
+  namespace Express {
+    interface User extends AuthUser {}
+  }
 }
 
 export const authenticateJwt = (req: Request, res: Response, next: NextFunction): void => {
-  passport.authenticate('jwt', { session: false }, (err: Error | null, user: JwtUser | false) => {
+  passport.authenticate('jwt', { session: false }, (err: Error | null, user: AuthUser | false) => {
     if (err) {
       return next(err);
     }
