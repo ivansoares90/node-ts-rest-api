@@ -11,8 +11,8 @@ const userController = new UserController(userService);
 router.use(authenticate);
 
 // User routes
-router.get('/:id', userController.findById);
 router.get('/email', userController.findByEmail);
+router.get('/:id', userController.findById);
 router.post('/', userController.create);
 router.put('/:id', userController.update);
 router.delete('/:id', userController.delete);
