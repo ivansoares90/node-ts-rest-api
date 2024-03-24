@@ -74,4 +74,9 @@ export const errorHandler = (
     message: 'Internal server error',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   });
+};
+
+// Wrapper for async route handlers to catch errors
+export const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
 }; 

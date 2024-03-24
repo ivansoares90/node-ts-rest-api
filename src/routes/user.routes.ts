@@ -1,23 +1,20 @@
 import { Router } from 'express';
 import { UserController } from '@/controllers/user.controller';
-import { authenticateJwt } from '@/middlewares/passport.middleware';
+import { UserService } from '@/services/user.service';
+import { authenticate } from '@/middlewares/auth.middleware';
 
 const router = Router();
-const userController = new UserController();
+const userService = new UserService();
+const userController = new UserController(userService);
 
-// All routes require authentication
-router.use(authenticateJwt);
+// All routes require JWT authentication
+router.use(authenticate);
 
-// Get user by ID
-router.get('/:id', userController.getUser);
-
-// Create new user (typically this would be public, but showing protected route example)
-router.post('/', userController.createUser);
-
-// Update user
-router.put('/:id', userController.updateUser);
-
-// Delete user
-router.delete('/:id', userController.deleteUser);
+// User routes
+router.get('/:id', userController.findById);
+router.get('/email', userController.findByEmail);
+router.post('/', userController.create);
+router.put('/:id', userController.update);
+router.delete('/:id', userController.delete);
 
 export default router; 
