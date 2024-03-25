@@ -3,6 +3,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  password: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,9 +16,10 @@ export interface CreateUserDto {
 }
 
 export interface UpdateUserDto {
+  email?: string;
   firstName?: string;
   lastName?: string;
-  email?: string;
+  password?: string;
 }
 
 export interface UserResponse {

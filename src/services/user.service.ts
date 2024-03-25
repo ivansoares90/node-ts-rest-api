@@ -15,31 +15,48 @@ export class UserService {
     return this.toUserResponse(user);
   }
 
-  public async findByEmail(email: string): Promise<User | undefined> {
-    return this.store.findOne(user => user.email === email);
+  public async findByEmail(email: string): Promise<UserResponse> {
+    const user = await this.store.findOne((u) => u.email === email);
+    if (!user) {
+      throw new AppError(404, 'User not found');
+    }
+    return this.toUserResponse(user);
   }
 
-  public async create(userData: CreateUserDto): Promise<UserResponse> {
-    const existingUser = await this.findByEmail(userData.email);
+  public async create(data: CreateUserDto): Promise<UserResponse> {
+    const existingUser = await this.store.findOne((u) => u.email === data.email);
     if (existingUser) {
-      throw new AppError(409, 'Email already exists');
+      throw new AppError(409, 'User with this email already exists');
     }
 
-    const id = generateId();
-    const user = await this.store.create(id, userData);
+    const user: User = {
+      id: generateId(),
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.password,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    await this.store.create(user.id, user);
     return this.toUserResponse(user);
   }
 
-  public async update(id: string, updateData: UpdateUserDto): Promise<UserResponse> {
-    const user = await this.store.update(id, updateData);
-    return this.toUserResponse(user);
+  public async update(id: string, data: UpdateUserDto): Promise<UserResponse> {
+    const user = await this.store.findById(id);
+    const updatedUser = await this.store.update(id, {
+      ...data,
+      updatedAt: new Date(),
+    } as Partial<User>);
+    return this.toUserResponse(updatedUser);
   }
 
   public async delete(id: string): Promise<void> {
     await this.store.delete(id);
   }
 
-  private toUserResponse(user: User): UserResponse {
+  public toUserResponse(user: User): UserResponse {
     return {
       id: user.id,
       email: user.email,
