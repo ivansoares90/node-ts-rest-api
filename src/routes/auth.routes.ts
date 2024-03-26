@@ -1,18 +1,20 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
-import { authenticateJwt } from '@/middlewares/passport.middleware';
-import { JwtPayload } from '@/types/auth.types';
+import { authenticateJwt } from '../middlewares/passport.middleware';
+import { JwtPayload } from '../types/auth.types';
+import { validate, authValidationRules } from '../middlewares/validation.middleware';
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Login route (public)
-router.post('/login', (req, res) => {
+router.post('/login', validate(authValidationRules.login), (req, res) => {
   const { email, password } = req.body;
 
   // This is a mock login - in a real app, you would validate credentials
   if (email === 'test@example.com' && password === 'password') {
-    const payload: JwtPayload = {
+    const now = Math.floor(Date.now() / 1000);
+    const payload: Omit<JwtPayload, 'iat' | 'exp'> = {
       userId: '123',
       email: 'test@example.com',
     };
