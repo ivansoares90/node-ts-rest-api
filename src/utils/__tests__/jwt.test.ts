@@ -1,9 +1,9 @@
-import { generateToken, verifyToken } from '../jwt';
+import { generateToken, verifyToken } from '../jwt.utils';
 import { AppError } from '../../middlewares/error.middleware';
 import { JwtPayload } from '../../types/auth.types';
 
 describe('JWT Utils', () => {
-  const mockPayload: JwtPayload = {
+  const mockPayload = {
     userId: '123',
     email: 'test@example.com',
   };
@@ -49,7 +49,7 @@ describe('JWT Utils', () => {
     it('should verify token expiration is in the future', () => {
       const token = generateToken(mockPayload);
       const decoded = verifyToken(token);
-      const exp = decoded.exp as number;
+      const exp = decoded.exp;
       const now = Math.floor(Date.now() / 1000);
       expect(exp).toBeGreaterThan(now);
     });

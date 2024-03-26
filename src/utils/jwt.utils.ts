@@ -1,18 +1,15 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { AppError } from '@/middlewares/error.middleware';
-
-interface JwtPayload {
-  userId: string;
-  email: string;
-}
+import { JwtPayload } from '@/types/auth.types';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '1h') as jwt.SignOptions['expiresIn'];
 
-export const generateToken = (payload: JwtPayload): string => {
-  return jwt.sign(payload, JWT_SECRET, {
+export const generateToken = (payload: Omit<JwtPayload, 'iat' | 'exp'>): string => {
+  const options: SignOptions = {
     expiresIn: JWT_EXPIRES_IN,
-  });
+  };
+  return jwt.sign(payload, JWT_SECRET, options);
 };
 
 export const verifyToken = (token: string): JwtPayload => {
