@@ -13,12 +13,10 @@ interface EnvConfig {
   jwtSecret: string;
   jwtExpiresIn: string;
   
-  // Database
-  dbHost: string;
-  dbPort: number;
-  dbName: string;
-  dbUser: string;
-  dbPassword: string;
+  // MongoDB
+  mongodbUri: string;
+  mongodbUser: string;
+  mongodbPassword: string;
   
   // Logging
   logLevel: string;
@@ -30,11 +28,7 @@ const requiredEnvVars = [
   'NODE_ENV',
   'JWT_SECRET',
   'JWT_EXPIRES_IN',
-  'DB_HOST',
-  'DB_PORT',
-  'DB_NAME',
-  'DB_USER',
-  'DB_PASSWORD',
+  'MONGODB_URI',
   'LOG_LEVEL',
 ] as const;
 
@@ -54,12 +48,10 @@ export const env: EnvConfig = {
   jwtSecret: process.env.JWT_SECRET!,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN!,
   
-  // Database
-  dbHost: process.env.DB_HOST!,
-  dbPort: parseInt(process.env.DB_PORT!, 10),
-  dbName: process.env.DB_NAME!,
-  dbUser: process.env.DB_USER!,
-  dbPassword: process.env.DB_PASSWORD!,
+  // MongoDB
+  mongodbUri: process.env.MONGODB_URI!,
+  mongodbUser: process.env.MONGODB_USER || '',
+  mongodbPassword: process.env.MONGODB_PASSWORD || '',
   
   // Logging
   logLevel: process.env.LOG_LEVEL!,
