@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { authenticateJwt } from '../middlewares/passport.middleware';
 import { JwtPayload } from '../types/auth.types';
 import { validate, authValidationRules } from '../middlewares/validation.middleware';
+import { env } from '../config/env';
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Login route (public)
 router.post('/login', validate(authValidationRules.login), (req, res) => {
@@ -19,10 +19,12 @@ router.post('/login', validate(authValidationRules.login), (req, res) => {
       email: 'test@example.com',
     };
 
-    const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: '1h',
+    const options: SignOptions = {
+      expiresIn: env.jwtExpiresIn as jwt.SignOptions['expiresIn'],
       algorithm: 'HS256', // Explicitly specify the algorithm
-    });
+    };
+
+    const token = jwt.sign(payload, env.jwtSecret, options);
 
     res.json({ token });
   } else {
