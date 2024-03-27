@@ -6,13 +6,13 @@ import { asyncHandler } from '@/middlewares/error.middleware';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  findById = asyncHandler(async (req: Request, res: Response) => {
-    const user = await this.userService.findById(req.params.id);
+  getById = asyncHandler(async (req: Request, res: Response) => {
+    const user = await this.userService.getById(req.params.id);
     res.json(user);
   });
 
-  findByEmail = asyncHandler(async (req: Request, res: Response) => {
-    const user = await this.userService.findByEmail(req.query.email as string);
+  getByEmail = asyncHandler(async (req: Request, res: Response) => {
+    const user = await this.userService.getByEmail(req.query.email as string);
     res.json(user);
   });
 
@@ -28,8 +28,8 @@ export class UserController {
     res.json(user);
   });
 
-  delete = asyncHandler(async (req: Request, res: Response) => {
-    await this.userService.delete(req.params.id);
+  remove = asyncHandler(async (req: Request, res: Response) => {
+    await this.userService.remove(req.params.id);
     res.status(204).send();
   });
 } 

@@ -10,12 +10,12 @@ export class UserService {
     this.store = new Store<User>();
   }
 
-  public async findById(id: string): Promise<UserResponse> {
+  public async getById(id: string): Promise<UserResponse> {
     const user = await this.store.findById(id);
     return this.toUserResponse(user);
   }
 
-  public async findByEmail(email: string): Promise<UserResponse> {
+  public async getByEmail(email: string): Promise<UserResponse> {
     const user = await this.store.findOne((u) => u.email === email);
     if (!user) {
       throw new AppError(404, 'User not found');
@@ -52,11 +52,11 @@ export class UserService {
     return this.toUserResponse(updatedUser);
   }
 
-  public async delete(id: string): Promise<void> {
+  public async remove(id: string): Promise<void> {
     await this.store.delete(id);
   }
 
-  public toUserResponse(user: User): UserResponse {
+  private toUserResponse(user: User): UserResponse {
     return {
       id: user.id,
       email: user.email,

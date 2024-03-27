@@ -12,10 +12,10 @@ const userController = new UserController(userService);
 router.use(authenticate);
 
 // User routes
-router.get('/email', userController.findByEmail);
-router.get('/:id', validate(userValidationRules.getUser), userController.findById);
+router.get('/email', userController.getByEmail);
+router.get('/:id', validate(userValidationRules.getUser), userController.getById);
 router.post('/', validate(userValidationRules.createUser), userController.create);
 router.put('/:id', validate(userValidationRules.updateUser), userController.update);
-router.delete('/:id', validate(userValidationRules.deleteUser), userController.delete);
+router.delete('/:id', validate(userValidationRules.deleteUser), userController.remove);
 
 export default router; 
