@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,18 +26,17 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run linting
+    - name: Run ESLint
       run: npm run lint
 
-    - name: Run tests
-      run: npm run test
-
-    - name: Build
+    - name: Build TypeScript
       run: npm run build
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+    - name: Run tests
+      run: npm test
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
       with:
-        name: dist
-        path: dist/
-        retention-days: 7 
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true 
