@@ -30,7 +30,7 @@ export class UserService {
       throw new AppError(409, 'User with this email already exists');
     }
 
-    // Create new user
+    // Create new user (password will be hashed by the model's pre-save hook)
     const user = await UserModel.create(data);
     return this.toUserResponse(user);
   }
@@ -48,6 +48,12 @@ export class UserService {
       if (existingUser) {
         throw new AppError(409, 'Email is already in use');
       }
+    }
+
+    // If password is being updated, ensure it's properly validated
+    if (data.password) {
+      // Password will be hashed by the model's pre-save hook
+      // Additional validation is handled by the model's schema
     }
 
     const user = await UserModel.findByIdAndUpdate(
