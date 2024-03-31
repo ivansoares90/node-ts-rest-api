@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidationChain, validationResult, body, param, query } from 'express-validator';
 import { AppError } from './error.middleware';
+import Joi from 'joi';
 
 // Common validation rules
 export const userValidationRules = {
@@ -94,5 +95,21 @@ export const validate = (validations: ValidationChain[]) => {
       .join(', ');
 
     throw new AppError(400, errorMessage);
+  };
+};
+
+export const validateRequest = (schema: Joi.ObjectSchema) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { error } = schema.validate(req.body, {
+      abortEarly: false,
+      allowUnknown: true
+    });
+
+    if (error) {
+      const errorMessages = error.details.map(detail => detail.message);
+      next(new AppError(400, errorMessages.join(', ')));
+    } else {
+      next();
+    }
   };
 }; 

@@ -1,3 +1,5 @@
+import { UserResponse } from './user.types';
+
 export interface JwtPayload {
   userId: string;
   email: string;
@@ -12,4 +14,24 @@ export interface JwtPayload {
 export interface AuthUser extends JwtPayload {
   userId: string;
   email: string;
+}
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface CreateUserDto {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  data: {
+    user: UserResponse;
+    token: string;
+  };
 } 

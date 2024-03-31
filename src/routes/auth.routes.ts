@@ -4,8 +4,26 @@ import { authenticateJwt } from '../middlewares/passport.middleware';
 import { JwtPayload } from '../types/auth.types';
 import { validate, authValidationRules } from '../middlewares/validation.middleware';
 import { env } from '../config/env';
+import { AuthController } from '@/controllers/auth.controller';
+import { validateRequest } from '@/middlewares/validation.middleware';
+import { loginSchema, registerSchema } from '@/validations/auth.validation';
 
 const router = Router();
+const authController = new AuthController();
+
+// Register new user
+router.post(
+  '/register',
+  validateRequest(registerSchema),
+  authController.register
+);
+
+// Login user
+router.post(
+  '/login',
+  validateRequest(loginSchema),
+  authController.login
+);
 
 // Login route (public)
 router.post('/login', validate(authValidationRules.login), (req, res) => {
