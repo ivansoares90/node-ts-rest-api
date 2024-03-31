@@ -44,9 +44,11 @@ export const registerSchema = Joi.object({
     .required()
     .min(2)
     .max(50)
+    .pattern(/^[a-zA-Z\s-']+$/)
     .messages({
       'string.min': 'First name must be at least 2 characters long',
       'string.max': 'First name cannot be more than 50 characters',
+      'string.pattern.base': 'First name can only contain letters, spaces, hyphens, and apostrophes',
       'any.required': 'First name is required',
       'string.empty': 'First name cannot be empty'
     }),
@@ -54,9 +56,11 @@ export const registerSchema = Joi.object({
     .required()
     .min(2)
     .max(50)
+    .pattern(/^[a-zA-Z\s-']+$/)
     .messages({
       'string.min': 'Last name must be at least 2 characters long',
       'string.max': 'Last name cannot be more than 50 characters',
+      'string.pattern.base': 'Last name can only contain letters, spaces, hyphens, and apostrophes',
       'any.required': 'Last name is required',
       'string.empty': 'Last name cannot be empty'
     })

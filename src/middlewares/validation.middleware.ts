@@ -20,14 +20,18 @@ export const userValidationRules = {
       .trim()
       .notEmpty()
       .withMessage('First name is required')
-      .isLength({ max: 50 })
-      .withMessage('First name must not exceed 50 characters'),
+      .isLength({ min: 2, max: 50 })
+      .withMessage('First name must be between 2 and 50 characters')
+      .matches(/^[a-zA-Z\s-']+$/)
+      .withMessage('First name can only contain letters, spaces, hyphens, and apostrophes'),
     body('lastName')
       .trim()
       .notEmpty()
       .withMessage('Last name is required')
-      .isLength({ max: 50 })
-      .withMessage('Last name must not exceed 50 characters'),
+      .isLength({ min: 2, max: 50 })
+      .withMessage('Last name must be between 2 and 50 characters')
+      .matches(/^[a-zA-Z\s-']+$/)
+      .withMessage('Last name can only contain letters, spaces, hyphens, and apostrophes'),
   ],
   updateUser: [
     param('id').isUUID().withMessage('Invalid user ID'),
@@ -42,15 +46,19 @@ export const userValidationRules = {
       .trim()
       .notEmpty()
       .withMessage('First name cannot be empty')
-      .isLength({ max: 50 })
-      .withMessage('First name must not exceed 50 characters'),
+      .isLength({ min: 2, max: 50 })
+      .withMessage('First name must be between 2 and 50 characters')
+      .matches(/^[a-zA-Z\s-']+$/)
+      .withMessage('First name can only contain letters, spaces, hyphens, and apostrophes'),
     body('lastName')
       .optional()
       .trim()
       .notEmpty()
       .withMessage('Last name cannot be empty')
-      .isLength({ max: 50 })
-      .withMessage('Last name must not exceed 50 characters'),
+      .isLength({ min: 2, max: 50 })
+      .withMessage('Last name must be between 2 and 50 characters')
+      .matches(/^[a-zA-Z\s-']+$/)
+      .withMessage('Last name can only contain letters, spaces, hyphens, and apostrophes'),
   ],
   deleteUser: [
     param('id').isUUID().withMessage('Invalid user ID'),
