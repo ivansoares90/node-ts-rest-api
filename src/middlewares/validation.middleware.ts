@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ValidationChain, validationResult, body, param, query } from 'express-validator';
 import { AppError } from './error.middleware';
 import Joi from 'joi';
+import { ValidationErrorMessages } from '@/constants/error.messages';
 
 // Common validation rules
 export const userValidationRules = {
@@ -9,62 +10,62 @@ export const userValidationRules = {
     body('email')
       .trim()
       .isEmail()
-      .withMessage('Please provide a valid email address')
+      .withMessage(ValidationErrorMessages.email.invalid)
       .normalizeEmail(),
     body('password')
       .isLength({ min: 8 })
-      .withMessage('Password must be at least 8 characters long')
+      .withMessage(ValidationErrorMessages.password.minLength)
       .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]/)
-      .withMessage('Password must contain at least one letter and one number'),
+      .withMessage(ValidationErrorMessages.password.pattern),
     body('firstName')
       .trim()
       .notEmpty()
-      .withMessage('First name is required')
+      .withMessage(ValidationErrorMessages.name.required('First name'))
       .isLength({ min: 2, max: 50 })
-      .withMessage('First name must be between 2 and 50 characters')
+      .withMessage(ValidationErrorMessages.name.minLength('First name'))
       .matches(/^[a-zA-Z\s-']+$/)
-      .withMessage('First name can only contain letters, spaces, hyphens, and apostrophes'),
+      .withMessage(ValidationErrorMessages.name.pattern('First name')),
     body('lastName')
       .trim()
       .notEmpty()
-      .withMessage('Last name is required')
+      .withMessage(ValidationErrorMessages.name.required('Last name'))
       .isLength({ min: 2, max: 50 })
-      .withMessage('Last name must be between 2 and 50 characters')
+      .withMessage(ValidationErrorMessages.name.minLength('Last name'))
       .matches(/^[a-zA-Z\s-']+$/)
-      .withMessage('Last name can only contain letters, spaces, hyphens, and apostrophes'),
+      .withMessage(ValidationErrorMessages.name.pattern('Last name')),
   ],
   updateUser: [
-    param('id').isUUID().withMessage('Invalid user ID'),
+    param('id').isUUID().withMessage(ValidationErrorMessages.id.invalid),
     body('email')
       .optional()
       .trim()
       .isEmail()
-      .withMessage('Please provide a valid email address')
+      .withMessage(ValidationErrorMessages.email.invalid)
       .normalizeEmail(),
     body('firstName')
       .optional()
       .trim()
       .notEmpty()
-      .withMessage('First name cannot be empty')
+      .withMessage(ValidationErrorMessages.name.empty('First name'))
       .isLength({ min: 2, max: 50 })
-      .withMessage('First name must be between 2 and 50 characters')
+      .withMessage(ValidationErrorMessages.name.minLength('First name'))
       .matches(/^[a-zA-Z\s-']+$/)
-      .withMessage('First name can only contain letters, spaces, hyphens, and apostrophes'),
+      .withMessage(ValidationErrorMessages.name.pattern('First name')),
     body('lastName')
       .optional()
       .trim()
       .notEmpty()
-      .withMessage('Last name cannot be empty')
+      .withMessage(ValidationErrorMessages.name.empty('Last name'))
       .isLength({ min: 2, max: 50 })
-      .withMessage('Last name must be between 2 and 50 characters')
+      .withMessage(ValidationErrorMessages.name.minLength('Last name'))
       .matches(/^[a-zA-Z\s-']+$/)
-      .withMessage('Last name can only contain letters, spaces, hyphens, and apostrophes'),
+      .withMessage(ValidationErrorMessages.name.pattern('Last name')),
   ],
   deleteUser: [
-    param('id').isUUID().withMessage('Invalid user ID'),
+    param('id').isUUID().withMessage(ValidationErrorMessages.id.invalid),
   ],
   getUser: [
-    param('id').isUUID().withMessage('Invalid user ID'),
+    param('id').isUUID().withMessage(ValidationErrorMessages.id.invalid),
   ],
 };
 
@@ -73,11 +74,11 @@ export const authValidationRules = {
     body('email')
       .trim()
       .isEmail()
-      .withMessage('Please provide a valid email address')
+      .withMessage(ValidationErrorMessages.email.invalid)
       .normalizeEmail(),
     body('password')
       .notEmpty()
-      .withMessage('Password is required'),
+      .withMessage(ValidationErrorMessages.password.required),
   ],
 };
 
